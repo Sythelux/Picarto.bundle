@@ -1,0 +1,47 @@
+[
+  {
+    "id": "username",
+    "type": "text",
+    "label": "Username",
+    "default": ""
+  },
+  {
+    "id": "password",
+    "type": "text",
+    "label": "Password",
+    "default": "",
+    "option": "hidden"
+  },
+  {
+    "id": "quality",
+    "type": "enum",
+    "label": "Quality",
+    "values": [
+      "Auto",
+      "Low",
+      "Medium",
+      "High"
+    ],
+    "default": "Auto"
+  },
+  {
+    "id": "filter_adult",
+    "type": "enum",
+    "label": "Show Adult Channels",
+    "values": [
+      "true",
+      "false"
+    ],
+    "default": "false"
+  },
+  {
+    "id": "filter_gaming",
+    "type": "enum",
+    "label": "Show Gaming Channels",
+    "values": [
+      "true",
+      "false"
+    ],
+    "default": "false"
+  }
+]
