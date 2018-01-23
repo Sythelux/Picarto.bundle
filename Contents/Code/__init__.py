@@ -1,4 +1,4 @@
-from PicartoClientAPI import PublicApi, rest, logger, OnlineDetails, ApiClient
+from PicartoClientAPI import PublicApi, rest, logger, OnlineDetails, ApiClient, Category
 from pagination import PaginationStore
 
 public_api = PublicApi()
@@ -64,7 +64,7 @@ def MainMenu():
     Log.Debug("SubMenu: categories")
 
     oc.add(DirectoryObject(
-        key=Callback(EventsSubMenutitle=L('Events')),
+        key=Callback(EventsSubMenu, title=L('Events')),
         title=u'%s' % L('Events'),
     ))
     Log.Debug("SubMenu: events")
@@ -87,8 +87,7 @@ def buildSummary(details):
 @route(PREFIX + '/online')
 def OnlineSubMenu(title, page=1, **kwargs):
     try:
-        Log.Debug("OnlineSubMenu")
-        Log.Debug("Online: " + str(title))
+        Log.Debug("OnlineSubMenu " + str(page))
         page = int(page)
         if not pages.online_pages:
             buffer_list = list()
@@ -115,7 +114,7 @@ def OnlineSubMenu(title, page=1, **kwargs):
             oc.add(VideoClipObject(url=StreamURLForName(details.name),
                                    title=details.title,
                                    thumb=details.thumbnails.mobile,
-                                   # summary=buildSummary(details),
+                                   summary=buildSummary(details),
                                    # rating=, <-stars rating
                                    content_rating=L("adult") if details.adult else L("everyone"),
                                    # duration=float('inf'),# needs int
@@ -136,13 +135,48 @@ def OnlineSubMenu(title, page=1, **kwargs):
 
 
 @route(PREFIX + '/categories')
-def CategoriesSubMenu(key, title, **kwargs):
+def Categories(id):
+    return ContentNotFound()
+
+def buildCategorySummary(details):
+    return "online: " + str(details.online_channels) + \
+           " total: " + str(details.total_channels) + \
+           " viewers: " + str(details.viewers)
+
+
+def buildCategoryThumb(name):
+    return CATEGORY_THUMB % name.lower().replace(" ", "").replace("&","")
+
+
+@route(PREFIX + '/categories_list')
+def CategoriesSubMenu(title, **kwargs):
     Log.Debug("CategoriesSubMenu")
+    oc = ObjectContainer(
+        title2=u'%s' % title,
+        art=None,
+        content=ContainerContent.Albums
+    )
+    try:
+        categories_list = public_api.categories_get()  # type: list
+
+        for categories_dict in categories_list:
+            # Log.Debug(channel_dict)
+            details = api_client.deserialize_model(categories_dict, Category)  # type: Category
+            # Log.Debug(details)
+            oc.add(DirectoryObject(key=Callback(Categories, id=details.id),
+                                   title=details.name,
+                                   summary=buildCategorySummary(details),
+                                   tagline=L("adult") if details.adult else L("everyone"),
+                                   thumb=buildCategoryThumb(details.name)
+                                   ))
+        return oc
+    except Exception as e:
+        Log.Exception("OnlineSubMenu had an exception")
     return ContentNotFound()
 
 
 @route(PREFIX + '/events')
-def EventsSubMenu(key, title, **kwargs):
+def EventsSubMenu(title, **kwargs):
     Log.Debug("EventsSubMenu")
     return ContentNotFound()
 
