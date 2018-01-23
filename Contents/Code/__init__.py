@@ -3,7 +3,9 @@ from PicartoClientAPI import PublicApi, rest, logger, OnlineChannels
 
 from six import iteritems
 
-publicApi = PublicApi()
+public_api = PublicApi()
+api_client = ApiClient()
+
 rest.HTTP = HTTP
 logger.Log = Log
 
@@ -82,22 +84,22 @@ def OnlineSubMenu(key, title, **kwargs):
     try:
         Log.Debug("OnlineSubMenu")
         Log.Debug("Online: " + str(key) + ", " + str(title))
-        onlineChannels = publicApi.online_get(adult=Prefs['filter_adult'],
-                                              gaming=Prefs['filter_gaming'])  # type: OnlineChannels
-        for key, val in onlineChannels.to_dict():
-            Log.Debug(key, val)
+        online_channels_list = public_api.online_get(adult=Prefs['filter_adult'],
+                                                     gaming=Prefs['filter_gaming'])  # type: list
+        Log.Debug(online_channels_list)
+        for channel_dict in online_channels_list:
+            Log.Debug(channel_dict)
+            details = api_client.i__deserialize_model(channel_dict, OnlineDetails)  # type: OnlineDetails
+            Log.Debug(details)
+            return DirectoryObject(key=Callback(showArtist, id=details.user_id),
+                                   title=details.name,
+                                   tagline=details.category,
+                                   art=details.thumbnails.web
+                                   )
     except Exception as e:
         Log.Exception("OnlineSubMenu had an exception")
         return ContentNotFound()
 
-    # params = 'adult=%s' % Prefs['filter_adult']
-    # params = params + '&gaming=%s' % Prefs['filter_gaming']
-    # params = params + '&categories='  # TODO: later
-    # items = Api.Request(key, params)
-    #
-    # if not items:
-    # Log.Debug(items)
-    #
     # oc = ObjectContainer(
     #     title2=u'%s' % title,
     #     art=None,
