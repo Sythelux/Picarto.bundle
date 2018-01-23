@@ -13,10 +13,15 @@
 
 from __future__ import absolute_import
 
-# from Framework.docutils import # LOG
-from PicartoClientAPI.logger import LOG
-from ..api_client import ApiClient
+import sys
+import os
+import re
+
+# python 2 and python 3 compatibility library
+from six import iteritems
+
 from ..configuration import Configuration
+from ..api_client import ApiClient
 
 
 class PublicApi(object):
@@ -84,7 +89,7 @@ class PublicApi(object):
         all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in params['kwargs'].iteritems():
+        for key, val in iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
@@ -122,9 +127,9 @@ class PublicApi(object):
                                         response_type='Categories',
                                         auth_settings=auth_settings,
                                         callback=params.get('callback'),
-                                        i_return_http_data_only=params.get('_return_http_data_only'),
-                                        i_preload_content=params.get('_preload_content', True),
-                                        i_request_timeout=params.get('_request_timeout'),
+                                        _return_http_data_only=params.get('_return_http_data_only'),
+                                        _preload_content=params.get('_preload_content', True),
+                                        _request_timeout=params.get('_request_timeout'),
                                         collection_formats=collection_formats)
 
     def channel_id_channel_id_get(self, channel_id, **kwargs):
@@ -178,7 +183,7 @@ class PublicApi(object):
         all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in params['kwargs'].iteritems():
+        for key, val in iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
@@ -222,9 +227,9 @@ class PublicApi(object):
                                         response_type='ChannelDetails',
                                         auth_settings=auth_settings,
                                         callback=params.get('callback'),
-                                        i_return_http_data_only=params.get('_return_http_data_only'),
-                                        i_preload_content=params.get('_preload_content', True),
-                                        i_request_timeout=params.get('_request_timeout'),
+                                        _return_http_data_only=params.get('_return_http_data_only'),
+                                        _preload_content=params.get('_preload_content', True),
+                                        _request_timeout=params.get('_request_timeout'),
                                         collection_formats=collection_formats)
 
     def channel_id_channel_id_videos_get(self, channel_id, **kwargs):
@@ -278,7 +283,7 @@ class PublicApi(object):
         all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in params['kwargs'].iteritems():
+        for key, val in iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
@@ -322,9 +327,9 @@ class PublicApi(object):
                                         response_type='ChannelVideos',
                                         auth_settings=auth_settings,
                                         callback=params.get('callback'),
-                                        i_return_http_data_only=params.get('_return_http_data_only'),
-                                        i_preload_content=params.get('_preload_content', True),
-                                        i_request_timeout=params.get('_request_timeout'),
+                                        _return_http_data_only=params.get('_return_http_data_only'),
+                                        _preload_content=params.get('_preload_content', True),
+                                        _request_timeout=params.get('_request_timeout'),
                                         collection_formats=collection_formats)
 
     def channel_name_channel_name_get(self, channel_name, **kwargs):
@@ -378,7 +383,7 @@ class PublicApi(object):
         all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in params['kwargs'].iteritems():
+        for key, val in iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
@@ -422,9 +427,9 @@ class PublicApi(object):
                                         response_type='ChannelDetails',
                                         auth_settings=auth_settings,
                                         callback=params.get('callback'),
-                                        i_return_http_data_only=params.get('_return_http_data_only'),
-                                        i_preload_content=params.get('_preload_content', True),
-                                        i_request_timeout=params.get('_request_timeout'),
+                                        _return_http_data_only=params.get('_return_http_data_only'),
+                                        _preload_content=params.get('_preload_content', True),
+                                        _request_timeout=params.get('_request_timeout'),
                                         collection_formats=collection_formats)
 
     def channel_name_channel_name_videos_get(self, channel_name, **kwargs):
@@ -478,7 +483,7 @@ class PublicApi(object):
         all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in params['kwargs'].iteritems():
+        for key, val in iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
@@ -522,9 +527,9 @@ class PublicApi(object):
                                         response_type='ChannelVideos',
                                         auth_settings=auth_settings,
                                         callback=params.get('callback'),
-                                        i_return_http_data_only=params.get('_return_http_data_only'),
-                                        i_preload_content=params.get('_preload_content', True),
-                                        i_request_timeout=params.get('_request_timeout'),
+                                        _return_http_data_only=params.get('_return_http_data_only'),
+                                        _preload_content=params.get('_preload_content', True),
+                                        _request_timeout=params.get('_request_timeout'),
                                         collection_formats=collection_formats)
 
     def events_get(self, **kwargs):
@@ -576,7 +581,7 @@ class PublicApi(object):
         all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in params['kwargs'].iteritems():
+        for key, val in iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
@@ -614,9 +619,9 @@ class PublicApi(object):
                                         response_type='Events',
                                         auth_settings=auth_settings,
                                         callback=params.get('callback'),
-                                        i_return_http_data_only=params.get('_return_http_data_only'),
-                                        i_preload_content=params.get('_preload_content', True),
-                                        i_request_timeout=params.get('_request_timeout'),
+                                        _return_http_data_only=params.get('_return_http_data_only'),
+                                        _preload_content=params.get('_preload_content', True),
+                                        _request_timeout=params.get('_request_timeout'),
                                         collection_formats=collection_formats)
 
     def notifications_get(self, **kwargs):
@@ -668,7 +673,7 @@ class PublicApi(object):
         all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in params['kwargs'].iteritems():
+        for key, val in iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
@@ -706,9 +711,9 @@ class PublicApi(object):
                                         response_type='list[Notification]',
                                         auth_settings=auth_settings,
                                         callback=params.get('callback'),
-                                        i_return_http_data_only=params.get('_return_http_data_only'),
-                                        i_preload_content=params.get('_preload_content', True),
-                                        i_request_timeout=params.get('_request_timeout'),
+                                        _return_http_data_only=params.get('_return_http_data_only'),
+                                        _preload_content=params.get('_preload_content', True),
+                                        _request_timeout=params.get('_request_timeout'),
                                         collection_formats=collection_formats)
 
     def online_get(self, **kwargs):
@@ -731,8 +736,7 @@ class PublicApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        LOG.debug("online_get "+"")
-        kwargs['i_return_http_data_only'] = True
+        kwargs['_return_http_data_only'] = True
         if kwargs.get('callback'):
             return self.online_get_with_http_info(**kwargs)
         else:
@@ -759,22 +763,23 @@ class PublicApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        LOG.debug("online_get_with_http_info "+"")
 
         all_params = ['adult', 'gaming', 'categories']
         all_params.append('callback')
-        all_params.append('i_return_http_data_only')
-        all_params.append('i_preload_content')
-        all_params.append('i_request_timeout')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
-        params = {}
-        for key, val in kwargs.iteritems():
+        params = locals()
+        for key, val in iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method online_get" % key
                 )
             params[key] = val
+        del params['kwargs']
+
 
         collection_formats = {}
 
@@ -811,9 +816,9 @@ class PublicApi(object):
                                         response_type='OnlineChannels',
                                         auth_settings=auth_settings,
                                         callback=params.get('callback'),
-                                        i_return_http_data_only=params.get('_return_http_data_only'),
-                                        i_preload_content=params.get('_preload_content', True),
-                                        i_request_timeout=params.get('_request_timeout'),
+                                        _return_http_data_only=params.get('_return_http_data_only'),
+                                        _preload_content=params.get('_preload_content', True),
+                                        _request_timeout=params.get('_request_timeout'),
                                         collection_formats=collection_formats)
 
     def search_channels_get(self, q, **kwargs):
@@ -837,7 +842,7 @@ class PublicApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['i_return_http_data_only'] = True
+        kwargs['_return_http_data_only'] = True
         if kwargs.get('callback'):
             return self.search_channels_get_with_http_info(q, **kwargs)
         else:
@@ -868,12 +873,12 @@ class PublicApi(object):
 
         all_params = ['q', 'adult', 'page', 'commissions']
         all_params.append('callback')
-        all_params.append('i_return_http_data_only')
-        all_params.append('i_preload_content')
-        all_params.append('i_request_timeout')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in params['kwargs'].iteritems():
+        for key, val in iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
@@ -923,9 +928,9 @@ class PublicApi(object):
                                         response_type='ChannelSearchResults',
                                         auth_settings=auth_settings,
                                         callback=params.get('callback'),
-                                        i_return_http_data_only=params.get('i_return_http_data_only'),
-                                        i_preload_content=params.get('i_preload_content', True),
-                                        i_request_timeout=params.get('i_request_timeout'),
+                                        _return_http_data_only=params.get('_return_http_data_only'),
+                                        _preload_content=params.get('_preload_content', True),
+                                        _request_timeout=params.get('_request_timeout'),
                                         collection_formats=collection_formats)
 
     def search_videos_get(self, q, **kwargs):
@@ -978,12 +983,12 @@ class PublicApi(object):
 
         all_params = ['q', 'adult', 'page']
         all_params.append('callback')
-        all_params.append('i_return_http_data_only')
-        all_params.append('i_preload_content')
-        all_params.append('i_request_timeout')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in params['kwargs'].iteritems():
+        for key, val in iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
@@ -1031,7 +1036,7 @@ class PublicApi(object):
                                         response_type='VideoSearchResults',
                                         auth_settings=auth_settings,
                                         callback=params.get('callback'),
-                                        i_return_http_data_only=params.get('i_return_http_data_only'),
-                                        i_preload_content=params.get('i_preload_content', True),
-                                        i_request_timeout=params.get('i_request_timeout'),
+                                        _return_http_data_only=params.get('_return_http_data_only'),
+                                        _preload_content=params.get('_preload_content', True),
+                                        _request_timeout=params.get('_request_timeout'),
                                         collection_formats=collection_formats)

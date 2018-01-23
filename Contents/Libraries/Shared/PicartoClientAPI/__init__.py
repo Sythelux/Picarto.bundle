@@ -14,7 +14,6 @@
 from __future__ import absolute_import
 
 # import models into sdk package
-
 from .models.basic_channel_info import BasicChannelInfo
 from .models.basic_follower_info import BasicFollowerInfo
 from .models.basic_following_info import BasicFollowingInfo
@@ -57,6 +56,5 @@ from .apis.webhook_api import WebhookApi
 from .api_client import ApiClient
 
 from .configuration import Configuration
-from .logger import Logger
 
 configuration = Configuration()

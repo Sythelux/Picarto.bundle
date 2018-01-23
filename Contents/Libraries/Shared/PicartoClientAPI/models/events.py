@@ -12,6 +12,7 @@
 
 
 from pprint import pformat
+from six import iteritems
 import re
 
 
@@ -50,7 +51,7 @@ class Events(object):
         """
         result = {}
 
-        for attr, _ in self.swagger_types.iteritems():
+        for attr, _ in iteritems(self.swagger_types):
             value = getattr(self, attr)
             if isinstance(value, list):
                 result[attr] = list(map(
