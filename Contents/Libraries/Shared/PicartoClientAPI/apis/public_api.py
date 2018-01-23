@@ -13,8 +13,8 @@
 
 from __future__ import absolute_import
 
-# from Framework.docutils import # Log
-
+# from Framework.docutils import # LOG
+from PicartoClientAPI.logger import LOG
 from ..api_client import ApiClient
 from ..configuration import Configuration
 
@@ -731,7 +731,7 @@ class PublicApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        # Log.Debug("online_get "+"")
+        LOG.debug("online_get "+"")
         kwargs['i_return_http_data_only'] = True
         if kwargs.get('callback'):
             return self.online_get_with_http_info(**kwargs)
@@ -759,7 +759,7 @@ class PublicApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        # Log.Debug("online_get_with_http_info "+"")
+        LOG.debug("online_get_with_http_info "+"")
 
         all_params = ['adult', 'gaming', 'categories']
         all_params.append('callback')

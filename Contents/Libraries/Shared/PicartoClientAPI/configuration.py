@@ -13,7 +13,6 @@
 from __future__ import absolute_import
 
 import sys
-import urllib
 
 
 def singleton(class_):
@@ -62,11 +61,11 @@ class Configuration(object):
         # access token for OAuth
         self.access_token = ""
 
-        # Log format
+        # Log.format
         self.logger_format = '%(asctime)s %(levelname)s %(message)s'
-        # Log stream handler
+        # Log.stream handler
         self.logger_stream_handler = None
-        # Log file handler
+        # Log.file handler
         self.logger_file_handler = None
         # Debug file location
         self.logger_file = None

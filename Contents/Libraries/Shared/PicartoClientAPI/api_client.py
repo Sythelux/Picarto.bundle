@@ -20,6 +20,7 @@ import threading
 
 from datetime import date, datetime
 
+from PicartoClientAPI.logger import LOG
 from .configuration import Configuration
 from .rest import ApiException, RESTClientObject
 from . import models
@@ -95,7 +96,7 @@ class ApiClient(object):
                     i_return_http_data_only=None, collection_formats=None, i_preload_content=True,
                     i_request_timeout=None):
 
-        # Log.Debug("i__call_api " + "")
+        LOG.debug("i__call_api " + "")
         config = Configuration()
 
         # header parameters
@@ -205,8 +206,6 @@ class ApiClient(object):
             # and attributes which value is not None.
             # Convert attribute name to json key in
             # model definition for request.
-            vars(obj)
-            hasattr(obj, "bla")
             obj_dict = {
                 obj.attribute_map[attr]: getattr(obj, attr)
                 for attr, _ in obj.swagger_types.iteritems()
@@ -226,6 +225,7 @@ class ApiClient(object):
 
         :return: deserialized object.
         """
+        LOG.debug("deserialize " + str(response) + ", " + str(response_type))
         # handle file downloading
         # save response body into a tmp file and return the instance
         if response_type == "file":
@@ -248,10 +248,11 @@ class ApiClient(object):
 
         :return: object.
         """
+        LOG.debug("i__deserialize " + "")
         if data is None:
             return None
 
-        if isinstance(klass, str):  # type(klass) == str
+        if type(klass) == str:
             if klass.startswith('list['):
                 sub_kls = re.match('list\[(.*)\]', klass).group(1)
                 return [self.i__deserialize(sub_data, sub_kls)
@@ -319,7 +320,7 @@ class ApiClient(object):
             If parameter callback is None,
             then the method will return the response directly.
         """
-        # Log.Debug("call_api " + "")
+        LOG.debug("call_api " + "")
         if callback is None:
             return self.i__call_api(resource_path, method,
                                     path_params, query_params, header_params,
@@ -343,7 +344,7 @@ class ApiClient(object):
         """
         Makes the HTTP request using RESTClient.
         """
-        # Log.Debug("request " + "")
+        LOG.debug("request " + "")
         if method == "GET":
             return self.rest_client.GET(url,
                                         query_params=query_params,
@@ -556,6 +557,7 @@ class ApiClient(object):
 
         :return: int, long, float, str, bool.
         """
+        LOG.debug("i__deserialize_primitive " + str(data) + ", " + str(klass))
         try:
             return klass(data)
         except UnicodeEncodeError:
@@ -569,6 +571,7 @@ class ApiClient(object):
 
         :return: object.
         """
+        LOG.debug("i__deserialize_object " + "")
         return value
 
     def i__deserialize_date(self, string):
@@ -578,6 +581,7 @@ class ApiClient(object):
         :param string: str.
         :return: date.
         """
+        LOG.debug("i__deserialize_date " + "")
         try:
             from dateutil.parser import parse
             return parse(string).date()
@@ -598,6 +602,7 @@ class ApiClient(object):
         :param string: str.
         :return: datetime.
         """
+        LOG.debug("i__deserialize_datatime " + "")
         try:
             from dateutil.parser import parse
             return parse(string)
@@ -607,8 +612,7 @@ class ApiClient(object):
             raise ApiException(
                 status=0,
                 reason=(
-                    "Failed to parse `{0}` into a datetime object"
-                        .format(string)
+                    "Failed to parse `{0}` into a datetime object".format(string)
                 )
             )
 
@@ -620,6 +624,7 @@ class ApiClient(object):
         :param klass: class literal.
         :return: model object.
         """
+        LOG.debug("i__deserialize_model ")
         if not klass.swagger_types:
             return data
 

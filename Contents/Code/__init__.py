@@ -38,10 +38,11 @@ import PicartoClientAPI
 # from apis.webhook_api import WebhookApi
 
 # import ApiClient
-from PicartoClientAPI import PublicApi, rest
+from PicartoClientAPI import PublicApi, rest, logger, OnlineChannels
 
 publicApi = PublicApi()
 rest.HTTP = HTTP
+logger.Log = Log
 
 THUMB_BASE = "https://thumb-us1.picarto.tv/thumbnail/%s.jpg"
 
@@ -115,20 +116,23 @@ def MainMenu():
 
 @route(PREFIX + '/c')
 def OnlineSubMenu(key, title, **kwargs):
-    Log.Debug("OnlineSubMenu")
-    Log.Debug("Online: " + str(key) + ", " + str(title))
-    Log.Debug(str(publicApi.online_get(adult=Prefs['filter_adult'],
-                                       gaming=Prefs['filter_gaming'],
-                                       )
-                  )
-              )
+    try:
+        Log.Debug("OnlineSubMenu")
+        Log.Debug("Online: " + str(key) + ", " + str(title))
+        onlineChannels = publicApi.online_get(adult=Prefs['filter_adult'],
+                                              gaming=Prefs['filter_gaming'])  # type: OnlineChannels
+        for key, val in onlineChannels.to_dict():
+            Log.Debug(key, val)
+    except Exception as e:
+        Log.Exception("OnlineSubMenu had an exception")
+        return ContentNotFound()
+
     # params = 'adult=%s' % Prefs['filter_adult']
     # params = params + '&gaming=%s' % Prefs['filter_gaming']
     # params = params + '&categories='  # TODO: later
     # items = Api.Request(key, params)
     #
     # if not items:
-    return ContentNotFound()
     # Log.Debug(items)
     #
     # oc = ObjectContainer(
@@ -149,6 +153,7 @@ def OnlineSubMenu(key, title, **kwargs):
     #        )
 
     Log.Debug("return")
+    return ContentNotFound()
     # return oc
 
 

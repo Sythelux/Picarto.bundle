@@ -18,7 +18,9 @@ import re
 import ssl
 from urllib import urlencode
 
+from PicartoClientAPI.logger import LOG
 from .configuration import Configuration
+import logging
 
 HTTP = None
 
@@ -114,7 +116,7 @@ class RESTClientObject(object):
         :param i_request_timeout: timeout setting for this request. If one number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of (connection, read) timeouts.
         """
-        # Log.Debug("request " + str(method) + ", " + str(url) + ", " + str(query_params) + ", " + str(body))
+        LOG.debug("request " + str(method) + ", " + str(url) + ", " + str(query_params) + ", " + str(body))
         method = method.upper()
         assert method in ['GET', 'HEAD', 'DELETE', 'POST', 'PUT', 'PATCH', 'OPTIONS']
 
@@ -223,13 +225,13 @@ class RESTClientObject(object):
         if i_preload_content:
             r = RESTResponse(r)
 
-            # In the python 3, the response.data is bytes.
-            # we need to decode it to string.
+            # Log. the python 3, the response.data is bytes.
+            # we need to decode it to string.Log
             # if PY3:
             #     r.data = r.data.decode('utf8')
 
-            # # Log response body
-            # # Log.Debug("response body: %s", r.data)
+            # LOG.response body
+            # LOG.debug("response body: %s", r.data)
 
         if not 200 <= r.status <= 299:
             raise ApiException(http_resp=r)
