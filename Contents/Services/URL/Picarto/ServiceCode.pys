@@ -1,0 +1,47 @@
+def NormalizeURL(url):
+    return url.split('?')[0]
+
+
+def MetadataObjectForURL(url):
+    Log.Debug("MetadataObjectForURL")
+    user_name = GetUserName(url)
+    Log.Debug(user_name + ": " + url)
+    return VideoClipObject(title=user_name, summary="summary")
+
+
+def MediaObjectsForURL(url):
+    Log.Debug("MediaObjectsForURL")
+    Log.Debug(url)
+    if ".mp4" in url:
+        return [
+            MediaObject(
+                parts=[PartObject(key=Callback(Play, url=url))],
+                container=Container.MP4,
+                audio_codec=AudioCodec.AAC,
+                audio_channels=2,
+                video_codec=VideoCodec.H264,  # Crutch for disable generate parts,
+                optimized_for_streaming=True,
+            )
+        ]
+    elif ".jpeg" in url:
+        return [
+            MediaObject(
+                parts=[PartObject(key=Callback(Play, url=url))],
+                container=Container.MP4,  # TODO
+                audio_codec=AudioCodec.AAC,
+                audio_channels=2,
+                video_codec=VideoCodec.H264,  # Crutch for disable generate parts,
+                optimized_for_streaming=True,
+            )
+        ]
+    else:
+        Log.Warning("unknown: " + url)
+
+
+def GetUserName(url):
+    return url.split('/')[-1].split(".mp4")[0]
+
+
+@indirect
+def Play(url):
+    return IndirectResponse(VideoClipObject, key=url)
