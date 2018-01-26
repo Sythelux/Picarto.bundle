@@ -5,7 +5,7 @@ this is a plugin for [plex.tv](plex.tv) that provides access to [picarto.tv](pic
 
 Note: the Maintainer of this plugin neither works for Plex, nor Picarto
 
-[Picarto.TV Logo](https://picarto.tv/images/picarto_logo.svg)
+![Picarto.TV Logo](https://picarto.tv/images/picarto_logo.svg)
 
 Badges
 -------------
