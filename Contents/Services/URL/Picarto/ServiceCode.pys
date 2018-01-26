@@ -1,3 +1,20 @@
+import os
+import sys
+
+BUNDLE_PATH = os.path.join(os.getcwd().lstrip('\\\?').split('Plug-in Support')[0], 'Plug-ins', 'Picarto.bundle')
+MODULE_PATH = os.path.join(BUNDLE_PATH, 'Contents', 'Libraries', 'Shared')
+
+if MODULE_PATH not in sys.path:
+    sys.path.append(MODULE_PATH)
+    Log.Debug('*' * 80)
+    Log.Debug('* Library path below, added to sys.path, by ServiceCode.pys')
+    Log.Debug('* {}'.format(MODULE_PATH))
+    Log.Debug('*' * 80)
+
+from PicartoClientAPI import PublicApi, ChannelDetails
+import util
+
+
 def NormalizeURL(url):
     return url.split('?')[0]
 
@@ -6,7 +23,29 @@ def MetadataObjectForURL(url):
     Log.Debug("MetadataObjectForURL")
     user_name = GetUserName(url)
     Log.Debug(user_name + ": " + url)
-    return VideoClipObject(title=user_name, summary="summary")
+    public_api = PublicApi()
+    details = public_api.channel_name_channel_name_get(user_name)  # type: ChannelDetails
+    Log.Debug(details)
+    movie_object = MovieObject(
+        title=details.name + " - " + details.title,
+        thumb=details.thumbnails.web,
+        year=details.last_live.year,
+        originally_available_at=details.last_live,
+        studio=details.name,
+        tagline=util.generateTagline(details),
+        summary=util.generateSummary(details),
+        trivia="trivia",
+        quotes="quotes",
+        content_rating=L("adult") if details.adult else L("everyone"),
+        content_rating_age=18 if details.adult else 0,
+        # countries=util.generateCountries(details.languages),
+        # posters=details.avatar,
+        # art=generateSummary(), # but images,
+        # extras=generateExtras(details),
+    )
+    # director = movie_object.directors.new(name=details.name, photo=details.avatar)
+    # Log.Debug(director)
+    return movie_object
 
 
 def MediaObjectsForURL(url):
