@@ -1,0 +1,108 @@
+def NormalizeURL(url):
+    return url.split('?')[0]
+
+
+def MetadataObjectForURL(url):
+    '''
+    class VideoClipObject(**kwargs)
+Represents a video clip (e.g. a YouTube or Vimeo video).
+url
+A string specifying the URL of the movie. If a URL service that matches the given URL is available, the key and rating_key attributes will be set and the list of media objects will be generated automatically.
+key
+A string specifying the path to the movie’s full metadata object. This is usually a function callback generated using Callback() (page 48). The function should
+return an ObjectContainer containing a single metadata object with the maximum amount of metadata available. Note: If the url attribute is set (invoking a URL service), the key attribute is set
+automatically.
+rating_key
+A string specifying a unique identifier for the movie. This unique value is used by the media server for maintaining play counts and providing other advanced features.
+Note: If the url attribute is set (invoking a URL service), the rating_key attribute is set automatically.
+genres
+A list of strings specifying the movie’s genre.
+tags
+A list of strings specifying the movie’s tags.
+duration
+An integer specifying the duration of the movie, in milliseconds.
+rating
+A float between 0 and 10 specifying the movie’s rating.
+original_title
+A string specifying the movie’s original title.
+source_title
+A string specifying the source of the movie (e.g. Netflix or YouTube)
+title
+A string specifying the movie’s title.
+year
+An integer specifying the movie’s release year.
+originally_available_at
+A date object specifying the movie’s original release date.
+studio
+A string specifying the movie’s studio.
+tagline
+A string specifying the movie’s tagline.
+summary
+A string specifying the movie’s summary.
+trivia
+A string containing trivia about the movie.
+quotes
+A string containing memorable quotes from the movie.
+content_rating
+A string specifying the movie’s content rating.
+content_rating_age
+A string specifying the minumum age for viewers of the movie.
+writers
+A list of strings specifying the movie’s writers.
+directors
+A list of strings specifying the movie’s directors.
+producers
+A list of strings specifying the movie’s producers.
+countries
+A list of strings specifying the countries involved in the production of the movie.
+thumb
+A string specifying an image resource to use as the movie’s thumbnail.
+art
+A string specifying an image resource to use as the movie’s background art.
+    :param url:
+    :return:
+    '''
+    Log.Debug("MetadataObjectForURL")
+    user_name = GetUserName(url)
+    Log.Debug(user_name + ": " + url)
+    return VideoClipObject(title=user_name, summary="summary")
+
+
+def MediaObjectsForURL(url):
+    Log.Debug("MediaObjectsForURL")
+    Log.Debug(url)
+    return [
+        MediaObject(
+            parts=[PartObject(key=Callback(Play, url=url))],
+            container=Container.MP4,
+            audio_codec=AudioCodec.AAC,
+            audio_channels=2,
+            video_codec=VideoCodec.H264,  # Crutch for disable generate parts,
+            optimized_for_streaming=True,
+        )
+    ]
+#     try:
+#         content = HTTP.Request(url).content
+#         Log.Debug(content)
+#     except:
+#         raise Ex.MediaNotAvailable
+#     return [
+#         MediaObject(
+#             protocol='mp4',
+#             container='mpegts',
+#             video_codec=VideoCodec.H264,
+#             video_resolution='720',
+#             audio_codec=AudioCodec.AAC,
+#             video_frame_rate=25,
+#             audio_channels=2,
+#             optimized_for_streaming=True,
+#         )
+#     ]
+
+
+def GetUserName(url):
+    return url.split('/')[-1].split(".mp4")[0]
+
+@indirect
+def Play(url):
+    return IndirectResponse(VideoClipObject, key=url)
