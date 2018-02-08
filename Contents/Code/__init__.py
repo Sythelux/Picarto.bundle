@@ -1,9 +1,11 @@
 import util
-from PicartoClientAPI import PublicApi, rest, logger, OnlineDetails, ApiClient, Category, Configuration, ChannelDetails
+from PicartoClientAPI import PublicApi, rest, logger, OnlineDetails, ApiClient, Category, Configuration, ChannelDetails, \
+    Notification, UserApi
 from pagination import PaginationStore
 
 configuration = Configuration()
 public_api = PublicApi()
+user_api = UserApi()
 api_client = ApiClient()
 pages = PaginationStore()
 
@@ -32,7 +34,9 @@ STREAM_BASE = "https://1-edge5-us-east.picarto.tv/mp4/%s.mp4"
 def Start():
     configuration.username = Prefs['username']
     configuration.password = Prefs['password']
+    configuration.access_token = Prefs['access_token']
     util.Lang = L
+
 
 @handler(
     PREFIX,
@@ -66,12 +70,29 @@ def MainMenu():
     ))
     Log.Debug("SubMenu: events")
 
-    # oc.add(InputDirectoryObject(
-    #     key=Callback(
-    #         Search
-    #     ),
-    #     title=u'%s' % L('Search'), prompt=u'%s' % L('Search user'),
-    # ))
+    oc.add(DirectoryObject(
+        key=Callback(MyFollowsSubMenu, title=L('MyFollows')),
+        title=u'%s' % L('MyFollows'),
+    ))
+
+    Log.Debug("SubMenu: MyFollows")
+
+    oc.add(DirectoryObject(
+        key=Callback(NotificationsSubMenu, title=L('Notifications')),
+        title=u'%s' % L('Notifications'),
+    ))
+
+    Log.Debug("SubMenu: Notifications")
+
+    oc.add(InputDirectoryObject(
+        key=Callback(Search, kind="channel"),
+        title=u'%s' % L('Search Channels'), prompt=u'%s' % L('Search Channel'),
+    ))
+
+    oc.add(InputDirectoryObject(
+        key=Callback(Search, kind="video"),
+        title=u'%s' % L('Search Videos'), prompt=u'%s' % L('Search Video'),
+    ))
     return oc
 
 
@@ -193,6 +214,44 @@ def showArtist(name, **kwargs):
         Log.Exception("showArtist had an exception")
         return ContentNotFound()
     return oc
+
+
+def NotificationCallback(name):
+    return ContentNotFound()
+
+
+def NotificationsSubMenu(title):
+    Log.Debug("CategoriesSubMenu")
+    oc = ObjectContainer(
+        title2=u'%s' % title,
+        art=None,
+        content=ContainerContent.Albums
+    )
+    try:
+        notifications_list = public_api.notifications_get()  # type: list
+
+        for notifications_dict in notifications_list:
+            # Log.Debug(channel_dict)
+            details = api_client.deserialize_model(notifications_dict, Category)  # type: Notification
+            # Log.Debug(details)
+            oc.add(DirectoryObject(key=Callback(NotificationCallback, name=details.type),
+                                   title=details.type,
+                                   summary=details.body,
+                                   tagline=details.timestamp
+                                   ))
+        return oc
+    except Exception as e:
+        Log.Exception("OnlineSubMenu had an exception")
+    return ContentNotFound()
+
+
+def MyFollowsSubMenu(args):
+    user_api.user_following_get()
+    pass
+
+
+def Search(kind):
+    pass
 
 
 def StreamURLForName(name):

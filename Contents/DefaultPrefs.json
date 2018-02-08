@@ -2,13 +2,20 @@
   {
     "id": "username",
     "type": "text",
-    "label": "Username",
+    "label": "Username (Not Working atm)",
     "default": ""
   },
   {
     "id": "password",
     "type": "text",
-    "label": "Password",
+    "label": "Password (Not Working atm)",
+    "default": "",
+    "option": "hidden"
+  },
+  {
+    "id": "access_token",
+    "type": "text",
+    "label": "Access Token (Alternatively to Username and PW)",
     "default": "",
     "option": "hidden"
   },
